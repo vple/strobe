@@ -3,9 +3,25 @@
 {% block content %}
     </div>
     <div class="row-fluid">
-        <div class="span12">
+        <div class="span10">
             <canvas id="canvas">
             </canvas>
+        </div>
+        <div class="span2">
+            <table class="table table-condensed table-bordered">
+                <tr>
+                    <td>Red</td>
+                    <td><input id="red-color" class="input-mini color" type="number" min="0" max="255" value="0"></td>
+                </tr>
+                <tr>
+                    <td>Green</td>
+                    <td><input id="green-color" class="input-mini color" type="number" min="0" max="255" value="0"></td>
+                </tr>
+                <tr>
+                    <td>Blue</td>
+                    <td><input id="blue-color" class="input-mini color" type="number" min="0" max="255" value="200"></td>
+                </tr>
+            </table>
         </div>
     </div>
     <div class="row-fluid">
@@ -38,7 +54,7 @@
     <script>
         var width, height;
         function updateSize() {
-            width = $('.row-fluid').first().width();
+            width = $('div.row-fluid div.span10').first().width();
             height = $(window).height() - 80;
             
             $("#height").text(height);
@@ -122,7 +138,28 @@
                 createLine(points, color);
                 updateLineTable();
             });
-            
+
+            // change color
+            $('.color').change(function() {
+                var red = $('#red-color').val();
+                if (!$.isNumeric(red) || Math.floor(red) != red || red < 0 || red > 255) {
+                    red = 0;
+                    $('#red-color').val(0);
+                }
+                var green = $('#green-color').val();
+                if (!$.isNumeric(green) || Math.floor(green) != green || green < 0 || green > 255) {
+                    green = 0;
+                    $('#green-color').val(0);
+                }
+                var blue = $('#blue-color').val();
+                if (!$.isNumeric(blue) || Math.floor(blue) != blue || blue < 0 || blue > 255) {
+                    blue = 0;
+                    $('#blue-color').val(0);
+                }
+                
+                updateColor(red, green, blue);
+            });
+
         });
         $(window).resize(updateSize);
     </script>
