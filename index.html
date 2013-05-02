@@ -24,6 +24,7 @@
 
 {% block scripts %}
     {{ block.super }}
+    <script type="text/javascript" src="{% url strobe.views.line %}"></script>
     <script>
         var width, height;
         function updateSize() {
@@ -50,25 +51,30 @@
             var state = "none";
             
             context.strokeStyle = 'rgb(0, 0, 200)';
+            var points = [];
             canvas.mousedown(function(e) {
+                points = [];
                 state = "freedraw";
                 context.beginPath();
                 context.moveTo(e.offsetX, e.offsetY);
-                console.log(e.offsetX);
+                points.push([e.offsetX, e.offsetY]);
             });
             canvas.mousemove(function(e) {
                 if (state === "freedraw") {
                     var x = e.offsetX;
                     var y = e.offsetY;
                     context.lineTo(x, y);
+                    points.push([x, y]);
+                    console.log(points);
                     context.stroke();
-                    console.log(x + " " + y);
                 }
             });
             canvas.mouseup(function(e) {
                 state = "none";
-                console.log(e);
                 context.stroke();
+
+                line = new Line(null, null, points);
+                p = points;
             });
             
         });
