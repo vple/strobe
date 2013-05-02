@@ -1,0 +1,70 @@
+{% extends 'main.html' %}
+{% load tags %}
+
+{% block title %}Light Painting{% endblock %}
+
+{% block styles %}
+    {{ block.super }}
+    <style type="text/css">
+        body { padding-top: 50px; }
+    </style>
+{% endblock %}
+
+{% block nav %}
+    <div class="navbar navbar-fixed-top navbar-inverse">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                
+                <a class="brand" href="{% url strobe.views.index %}">Light Painting</a>
+                {% comment %}
+                <div class="nav-collapse">
+                    <ul class="nav">
+                        <li class="{% active request '/info/?' %}">
+                            <a href="{% url kbm.views.info %}">Info</a>
+                        </li>
+                        <li class="{% active request '[^(leaderboards)]/triplet/?' %}">
+                            <a href="{% url kbm.views.triplet_list %}">Triplet</a>
+                        </li>
+                        <li class="{% active request '[^(approve)]/add/?' %}">
+                            <a href="{% url kbm.views.add_triplet 0 %}">Add</a>
+                        </li>
+                        <li class="{% active request '/request/?' %}">
+                            <a href="{% url kbm.views.request_join_group %}">Request</a>
+                        </li>
+                        <li class="{% active request '/approve/?' %}">
+                            <a href="{% url kbm.views.approve_group %}">Approve</a>
+                        </li>
+                        <li class="{% active request '/leaderboards/?' %}">
+                            <a href="{% url kbm.views.leaderboards 0 %}">Leaderboards</a>
+                        </li>
+                    </ul>
+                    <ul class="nav pull-right">
+                        <li class="divider-vertical"></li>
+                        <li class="{% active request '/profile/?' %}">
+                            <a href="{% url kbm.views.profile_about %}">{{ kbm_user }}</a>
+                        </li>
+                    </ul>
+                    <form class="navbar-search pull-right">
+                        <input type="text" class="person-typeahead input-medium search-query nav-search" placeholder="Go to...">
+                    </form>
+                </div><!--/.nav-collapse -->
+                {% endcomment %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+{% endblock %}

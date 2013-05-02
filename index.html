@@ -1,0 +1,77 @@
+{% extends 'strobe/strobe_main.html' %}
+
+{% block content %}
+    </div>
+    <div class="row-fluid">
+        <div class="span12">
+            <canvas id="canvas">
+            </canvas>
+        </div>
+    </div>
+    <p id="height"></p>
+    <p id="width"></p>
+{% endblock %}
+
+{% block styles %}
+    {{ block.super }}
+    <style type="text/css">
+        canvas {
+/*             background-color: black; */
+            border: 1px solid black;
+            }
+    </style>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script>
+        var width, height;
+        function updateSize() {
+            width = $('.row-fluid').first().width();
+            height = $(window).height() - 80;
+            
+            $("#height").text(height);
+            $("#width").text(width);
+        }
+    
+        $(document).ready(function() {
+            updateSize();
+            var canvas = $('#canvas');
+            var rect = canvas[0].getBoundingClientRect();
+            context = canvas[0].getContext('2d');
+//             abc = 0;
+            
+            canvas[0].width = width;
+            canvas[0].height = height;
+            
+//             context.fillStyle = 'rgb(200, 0, 0)';
+//             context.fillRect(10, 10, 55, 50);
+            
+            var state = "none";
+            
+            context.strokeStyle = 'rgb(0, 0, 200)';
+            canvas.mousedown(function(e) {
+                state = "freedraw";
+                context.beginPath();
+                context.moveTo(e.offsetX, e.offsetY);
+                console.log(e.offsetX);
+            });
+            canvas.mousemove(function(e) {
+                if (state === "freedraw") {
+                    var x = e.offsetX;
+                    var y = e.offsetY;
+                    context.lineTo(x, y);
+                    context.stroke();
+                    console.log(x + " " + y);
+                }
+            });
+            canvas.mouseup(function(e) {
+                state = "none";
+                console.log(e);
+                context.stroke();
+            });
+            
+        });
+        $(window).resize(updateSize);
+    </script>
+{% endblock %}
