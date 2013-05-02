@@ -8,6 +8,16 @@
             </canvas>
         </div>
     </div>
+    <div class="row-fluid">
+        <table id="lineTable" class="span12 table">
+            <tr class="template" style="display: none;">
+                <td class="line-index"></td>
+                <td class="red"></td>
+                <td class="green"></td>
+                <td class="blue"></td>
+            </tr>
+        </table>
+    </div>
     <p id="height"></p>
     <p id="width"></p>
 {% endblock %}
@@ -33,6 +43,42 @@
             
             $("#height").text(height);
             $("#width").text(width);
+        };
+    
+        var firstLine = null;
+        var lastLine = null;
+        function createLine(points, color) {
+            lastLine = new Line(lastLine, null, points, color);
+            if (firstLine == null) {
+                firstLine = lastLine;
+            }
+        };
+        
+        function updateLineTable() {
+            $('#lineTable').find('tr:gt(0)').remove();
+        
+            var line = firstLine;
+            var index = 1;
+            while (line != null) {
+                var row = $('tr.template').clone().removeClass('template').show();
+                row.find('.line-index').text(index);
+                row.find('.red').text(line.color[0]);
+                row.find('.green').text(line.color[1]);
+                row.find('.blue').text(line.color[2]);
+                $('#lineTable').append(row);
+                row.data('line', line);
+                
+                line = line.nextLine;
+                index++;
+            }
+        };
+        
+        var context;
+        var color;
+        function updateColor(red, green, blue) {
+            color = [red, green, blue];
+            context.fillStyle = 'rgb(' + red + ',' + green + ',' + blue + ')';
+            context.strokeStyle = 'rgb(' + red + ',' + green + ',' + blue + ')';
         }
     
         $(document).ready(function() {
@@ -50,7 +96,8 @@
             
             var state = "none";
             
-            context.strokeStyle = 'rgb(0, 0, 200)';
+            updateColor(0, 0, 200);
+            
             var points = [];
             canvas.mousedown(function(e) {
                 points = [];
@@ -65,7 +112,6 @@
                     var y = e.offsetY;
                     context.lineTo(x, y);
                     points.push([x, y]);
-                    console.log(points);
                     context.stroke();
                 }
             });
@@ -73,8 +119,8 @@
                 state = "none";
                 context.stroke();
 
-                line = new Line(null, null, points);
-                p = points;
+                createLine(points, color);
+                updateLineTable();
             });
             
         });
